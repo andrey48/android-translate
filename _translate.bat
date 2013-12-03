@@ -5,10 +5,12 @@ set TRANS=lewa_v5\Russian\main
 set WD=WORKDIR
 set INP=_IN
 set OUT=_OUT
+set TOOLS=_tools
 set LOG=%~n0.log
-set APK=java -jar apktool.jar
-set SIGN=java -jar signapk.jar cert\testkey.x509.pem cert\testkey.pk8
-set ALIGN=zipalign.exe -f -v 4
+set APK=java -jar %TOOLS%\apktool.jar
+set SIGN=java -jar %TOOLS%\signapk.jar %TOOLS%\cert\testkey.x509.pem %TOOLS%\cert\testkey.pk8
+set ALIGN=%TOOLS%\zipalign.exe -f -v 4
+set BAKSMALI=java -jar %TOOLS%\baksmali-1.4.2.jar -a 17
 
 :: Make work dirs
 rem if exist %WD% rmdir /s /q %WD%
@@ -43,9 +45,10 @@ exit 0
   if exist %WD%\!APP! rmdir /s /q %WD%\!APP!
   if exist %WD%\_!APP! del /q %WD%\_!APP!
   %APK% decode --no-src %1 %WD%\!APP! 2>> %LOG%
+  if exist %TRANS%\!APP!\smali %BAKSMALI% -x %~pn1.odex -d _IN\framework -o %WD%\!APP!\smali
   xcopy /sfy %TRANS%\!APP!\* %WD%\!APP! >> %LOG%
   if "!APP!"=="lewa-res.apk" call :lewa_res_hack
-  %APK% build %WD%\!APP! %WD%\_!APP! 2>> %LOG%
+  %APK% build -a %TOOLS%\aapt.exe %WD%\!APP! %WD%\_!APP! 2>> %LOG%
   endlocal
 exit /b
 
@@ -63,8 +66,8 @@ exit /b
   setlocal enabledelayedexpansion
   set APP=%~nx1
   call :translate_apk %1
-  xcopy /sfy %1 %WD%\_!APP! >> %LOG%
-  7z.exe u -tzip -mx=0 %WD%\_!APP! %CD%\%WD%\!APP!\build\apk\resources.arsc >> %LOG%
+  xcopy /fy %1 %WD%\_!APP! >> %LOG%
+  %TOOLS%\7z.exe u -tzip -mx=0 %WD%\_!APP! %CD%\%WD%\!APP!\build\apk\resources.arsc >> %LOG%
   %ALIGN% %WD%\_!APP! %OUT%\framework\!APP! >> %LOG%
   del /q %WD%\_!APP!
   endlocal
