@@ -1,11 +1,11 @@
 @echo off
 setlocal enabledelayedexpansion
 
-set TRANS=translation\Russian\main
+set TRANS=lewa_v5\Russian\main
 set WD=WORKDIR
 set INP=_IN
 set OUT=_OUT
-set LOG=translate.log
+set LOG=%~n0.log
 set APK=java -jar apktool.jar
 set SIGN=java -jar signapk.jar cert\testkey.x509.pem cert\testkey.pk8
 set ALIGN=zipalign.exe -f -v 4
