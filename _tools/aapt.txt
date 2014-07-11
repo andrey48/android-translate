@@ -22,12 +22,9 @@ Usage:
         [--max-res-version VAL] \
         [-I base-package [-I base-package ...]] \
         [-A asset-source-dir]  [-G class-list-file] [-P public-definitions-file] \
-        [-S resource-sources [-S resource-sources ...]] \
-        [-F apk-file] [-J R-file-dir] \
+        [-S resource-sources [-S resource-sources ...]]         [-F apk-file] [-J R-file-dir] \
         [--product product1,product2,...] \
-        [-c CONFIGS] [--preferred-configurations CONFIGS] \
-        [raw-files-dir [raw-files-dir] ...] \
-        [--output-text-symbols DIR]
+        [raw-files-dir [raw-files-dir] ...]
 
    Package the android resources.  It will read assets and resources that are
    supplied with the -M -A -S or raw-files-dir arguments.  The -J -P -F and -R
@@ -38,9 +35,6 @@ Usage:
 
  aapt a[dd] [-v] file.{zip,jar,apk} file1 [file2 ...]
    Add specified files to Zip-compatible archive.
-
- aapt c[runch] [-v] -S resource-sources ... -C output-folder ...
-   Do PNG preprocessing and store the results in output folder.
 
  aapt v[ersion]
    Print program version.
@@ -100,16 +94,8 @@ Usage:
        inserts android:versionName in to manifest.
    --custom-package
        generates R.java into a different package.
-   --extra-packages
-       generate R.java for libraries. Separate libraries with ':'.
-   --generate-dependencies
-       generate dependency files in the same directories for R.java and resource package
    --auto-add-overlay
        Automatically add resources that are only in overlays.
-   --preferred-configurations
-       Like the -c option for filtering out unneeded configurations, but
-       only expresses a preference.  If there is no resource available with
-       the preferred configuration then it will not be stripped.
    --rename-manifest-package
        Rewrite the manifest so that its package name is the package name
        given here.  Relative class names (for example .Foo) will be
@@ -130,14 +116,3 @@ Usage:
        Make the resources ID non constant. This is required to make an R java class
        that does not contain the final value but is used to make reusable compiled
        libraries that need to access resources.
-   --error-on-failed-insert
-       Forces aapt to return an error if it fails to insert values into the manifest
-       with --debug-mode, --min-sdk-version, --target-sdk-version --version-code
-       and --version-name.
-       Insertion typically fails if the manifest already defines the attribute.
-   --output-text-symbols
-       Generates a text file containing the resource symbols of the R class in the
-       specified folder.
-   --ignore-assets
-       Assets to be ignored. Default pattern is:
-       !.svn:!.git:!.ds_store:!*.scc:.*:<dir>_*:!CVS:!thumbs.db:!picasa.ini:!*~
